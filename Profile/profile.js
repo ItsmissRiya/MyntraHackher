@@ -1,58 +1,53 @@
-document.querySelector("button").addEventListener("click",loginfun)
+document.addEventListener("DOMContentLoaded", function () {
+  // Ensure DOM is fully loaded before accessing elements
+  var loginButton = document.querySelector("#login");
+  if (loginButton) {
+    loginButton.addEventListener("click", loginFunction);
+  } else {
+    console.error("Login button not found in the DOM");
+  }
+});
 
- var userdata =JSON.parse(localStorage.getItem("userarr")) ||[];
+async function loginFunction(event) {
+  event.preventDefault(); // Prevent the default form submission behavior
 
-function loginfun(){
-    var in_mob =document.querySelector("#mob").value;
-  
-    for(var a=userdata.length-1; a>=0 ;a--)
-  {
-    if (in_mob ==""){
-        alert("enter mobile to login")
-        break;
-       }
-    
-     if(in_mob == userdata[a].mob){
-           if( checkpass(a)){
-             console.log(checkpass(a))
-             alert("login successful")
-             document.querySelector("#mob").value = ""; 
-             document.querySelector("#pass").value = "";
+  var mob = document.querySelector("#mob").value;
+  var password = document.querySelector("#pass").value;
 
-              window.location.href ="../payment/address.html";
-              break;
-           }else{
-             alert("wrong password")
-             document.querySelector("#pass").value="";
-           }
+  // Perform basic validation
+  if (mob === "" || password === "") {
+    alert("Please fill in all fields");
+    return;
+  }
+
+  const userObj = {
+    mobile: mob,
+    password: password,
+  };
+
+  try {
+    const response = await fetch("http://192.168.1.215:3000/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(userObj),
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      if (data.exists) {
+        alert("Logged in successfully");
+        // Redirect or perform further actions on successful login
+        window.location.href = "../Profile/profile.html";
+      } else {
+        alert("Invalid credentials");
       }
-      else if(a==userdata.length-1){
-        
-        alert("you dont have account sign up first")
-    
-        window.location.href="signup.html"
-      }
-
+    } else {
+      alert("Error logging in");
+    }
+  } catch (error) {
+    console.error("Error:", error);
+    alert("Error logging in");
   }
 }
-
-function checkpass(a){
-
-  var in_pass =document.querySelector("#pass").value;
-
-   return ( userdata[a].password == in_pass)
-     
-}
-
-
-
-// HYPERLINKS
-document.getElementById('profile').addEventListener('click', function(){
-  window.location.href = "signup.html"
-})
-document.getElementById('landingPage').addEventListener('click', function(){
-  window.location.href = "../Landingpage/index.html"
-})
-document.getElementById('signUp').addEventListener('click', function(){
-  window.location.href = "../Profile/signup.html"
-})
