@@ -1,28 +1,61 @@
 document.addEventListener("DOMContentLoaded", function () {
-  // Select the form and greeting elements
-  console.log("DOMContentLoaded event fired"); // Check if event fires
+  console.log("DOMContentLoaded event fired");
 
-  // Select the form and greeting elements
   var postForm = document.querySelector("#postForm");
   var greet = document.querySelector("#greeting");
 
-  // Retrieve the user's name from localStorage
   const name = localStorage.getItem("User_name");
-  console.log("Retrieved name from localStorage:", name); // Check retrieved name
+  console.log("Retrieved name from localStorage:", name);
 
-  // Check if the name exists in localStorage
   if (name) {
-    // Create a new h3 element to display the greeting message
     const message = document.createElement("p");
     message.textContent = `Hi, ${name}! Welcome`;
-    console.log("Created greeting message:", message.textContent); // Check message content
-
-    // Append the message to the greeting element
-    greet.appendChild(message); // Append the created message to the greeting div
+    console.log("Created greeting message:", message.textContent);
+    greet.appendChild(message);
   } else {
-    // Handle the case where the name is not found in localStorage
     console.error("User_name is not defined in localStorage");
   }
+
+  // if (postForm) {
+  //   postForm.addEventListener("submit", async function (event) {
+  //     event.preventDefault();
+
+  //     var formData = new FormData(postForm);
+  //     const token = localStorage.getItem("token");
+  //     console.log("Token retrieved:", token);
+
+  //     if (!token) {
+  //       alert("No token found. Please login first.");
+  //       return;
+  //     }
+
+  //     try {
+  //       const response = await fetch("http://192.168.1.215:3000/login", {
+  //         method: "POST",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //         body: JSON.stringify({ mobile, password }),
+  //       });
+
+  //       if (response.ok) {
+  //         const data = await response.json();
+  //         console.log("Login response data:", data); // Debugging login response
+  //         localStorage.setItem("token", `Bearer ${data.token}`); // Store token in Bearer format
+  //         localStorage.setItem("userName", data.name);
+  //         alert("Login successful");
+  //         displayUserName();
+  //       } else {
+  //         const errorMessage = await response.text();
+  //         console.error("Server responded with error:", errorMessage);
+  //         alert("Error logging in");
+  //       }
+  //     } catch (error) {
+  //       console.error("Error:", error);
+  //       alert("Error logging in");
+  //     }
+  //   });
+  // }
 
   if (postForm) {
     postForm.addEventListener("submit", async function (event) {
@@ -37,31 +70,14 @@ document.addEventListener("DOMContentLoaded", function () {
         return;
       }
 
+      const url = "http://192.168.1.215:3000/post";
+      console.log("Sending POST request to:", url);
+
       try {
-        // Fetch user data
-        const userResponse = await fetch("http://192.168.1.215:3000/user", {
-          headers: {
-            Authorization: `Bearer ${token}`, // Correct Bearer format
-          },
-        });
-
-        if (userResponse.ok) {
-          const userData = await userResponse.json();
-          console.log("User data retrieved:", userData); // Debugging user data
-          document.getElementById("userName").textContent = userData.name;
-        } else {
-          const errorText = await userResponse.text();
-          console.error("Failed to retrieve user data:", errorText);
-          alert("Failed to retrieve user data");
-        }
-
-        const url = "http://192.168.1.215:3000/post";
-        console.log("Sending POST request to:", url);
-
         const response = await fetch(url, {
           method: "POST",
           headers: {
-            Authorization: `Bearer ${token}`, // Correct Bearer format
+            Authorization: token,
           },
           body: formData,
         });
