@@ -194,7 +194,7 @@ header >* {
     #reggDropdown:hover #drop{
         visibility: visible;
         width: 20rem;
-        height: 15rem;
+        height: 25rem;
     }
     #reggDropdown > #drop .dropList{
         font-size: 0;

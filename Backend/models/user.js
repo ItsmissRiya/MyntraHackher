@@ -5,6 +5,13 @@ const userSchema = new mongoose.Schema({
   mobile: { type: String, required: true },
   email: { type: String, required: true },
   password: { type: String, required: true },
+  posts: [
+    {
+      imageUrl: String,
+      caption: String,
+      createdAt: Date,
+    },
+  ],
 });
 
 const User = mongoose.model("User", userSchema);

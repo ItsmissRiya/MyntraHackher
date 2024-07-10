@@ -1,0 +1,51 @@
+/* styles.css */
+
+/* Center the form container */
+.form-container {
+    width: 50%; /* Adjust width as needed */
+    margin: 10%; /* Center align horizontally */
+    margin-left:20% ;
+    padding: 20px; /* Add padding for spacing */
+    border: 1px solid #ccc; /* Add border for box effect */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Add shadow for depth */
+}
+
+/* Style form elements */
+form {
+    display: flex;
+    margin: 10%;
+
+    flex-direction: column;
+}
+
+label {
+    margin-bottom: 10px;
+    font-size: 18px;
+}
+
+input[type="text"], input[type="file"], button {
+    margin-bottom: 15px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+button {
+    background-color: #e10c69;
+    color: white;
+    border: none;
+    cursor: pointer;
+    padding: 12px 20px;
+    font-size: 18px;
+}
+
+button:hover {
+    background-color: #e10c69;
+}
+
+greet{
+    font-size: 23px;
+    font-weight: 600;
+
+}
