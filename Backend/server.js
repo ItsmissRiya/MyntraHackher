@@ -108,6 +108,7 @@ app.get("/protected", (req, res) => {
 });
 
 // POST route for posting content with file upload
+// POST route for posting content with file upload
 app.post("/post", upload.single("image"), async (req, res) => {
   const { caption } = req.body;
   const { file } = req;
@@ -130,6 +131,7 @@ app.post("/post", upload.single("image"), async (req, res) => {
       createdAt: new Date(),
     };
 
+    // Ensure user.posts is initialized as an array
     if (!Array.isArray(user.posts)) {
       user.posts = [];
     }
@@ -144,6 +146,24 @@ app.post("/post", upload.single("image"), async (req, res) => {
     res.status(500).json({ error: "Error submitting post" });
   }
 });
+
+app.get("/posts", async (req, res) => {
+  try {
+    const userId = req.userId;
+    console.log(userId);
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    res.status(200).json({ posts: user.posts });
+  } catch (error) {
+    console.error("Error fetching posts:", error);
+    res.status(500).json({ error: "Error fetching posts" });
+  }
+});
+
 app.get("/allPosts", authenticateToken, async (req, res) => {
   try {
     const users = await User.find({}, "name posts"); // Fetch all users with their names and posts
