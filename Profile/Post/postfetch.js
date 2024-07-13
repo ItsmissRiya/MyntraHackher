@@ -54,9 +54,26 @@ document.addEventListener("DOMContentLoaded", () => {
       ).toLocaleString()}`;
       dateElement.className = "date";
 
+      // Create container for likes and dislikes
+      const reactionsContainer = document.createElement("div");
+      reactionsContainer.className = "reactions";
+
+      // Create elements for likes and dislikes
+      const likesElement = document.createElement("p");
+      likesElement.className = "likes";
+      likesElement.innerHTML = `<i class="fas fa-thumbs-up"></i> ${post.likes}`;
+
+      const dislikesElement = document.createElement("p");
+      dislikesElement.className = "dislikes";
+      dislikesElement.innerHTML = `<i class="fas fa-thumbs-down"></i> ${post.dislikes}`;
+
+      reactionsContainer.appendChild(likesElement);
+      reactionsContainer.appendChild(dislikesElement);
+
       postElement.appendChild(mediaElement);
       postElement.appendChild(captionElement);
       postElement.appendChild(dateElement);
+      postElement.appendChild(reactionsContainer);
 
       postsContainer.appendChild(postElement);
     });

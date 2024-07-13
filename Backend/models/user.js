@@ -10,6 +10,8 @@ const userSchema = new mongoose.Schema({
       imageUrl: String,
       caption: String,
       createdAt: Date,
+      likes: { type: Number, default: 0 },
+      dislikes: { type: Number, default: 0 },
     },
   ],
 });
