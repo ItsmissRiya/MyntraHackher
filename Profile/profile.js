@@ -39,7 +39,7 @@ async function loginFunction(event) {
         localStorage.setItem("User_name", data.name); // Store the token
 
         alert("Logged in successfully");
-        window.location.href = "http://127.0.0.1:5500/Profile/Post/post.html";
+        window.location.href = "http://127.0.0.1:5500/Profile/Feed/feed.html";
       } else {
         alert("Invalid credentials");
       }

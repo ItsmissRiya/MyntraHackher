@@ -7,6 +7,7 @@ const authenticateToken = require("./authenticateToken"); // Adjust the path as 
 const app = express();
 const multer = require("multer");
 const path = require("path"); // Add this line to import the path module
+const User = require("./models/user");
 
 app.use(cors());
 app.use((req, res, next) => {
@@ -15,6 +16,9 @@ app.use((req, res, next) => {
   console.log("Body:", req.body);
   next();
 });
+
+// Serve the uploads directory before the authentication middleware
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 const JWT_SECRET =
   "b4b53064bc848d70411f67443ff08ba812c6736d72684bfd666be8837b67a2b3";
@@ -38,14 +42,6 @@ mongoose.connect(
     useUnifiedTopology: true,
   }
 );
-
-// Define Mongoose schema and model (replace with your actual User schema definition)
-const User = mongoose.model("User", {
-  name: String,
-  mobile: String,
-  email: String,
-  password: String,
-});
 
 // Middleware to parse JSON and URL-encoded bodies
 app.use(bodyParser.json());
@@ -102,7 +98,6 @@ app.post("/login", async (req, res) => {
 
 // Middleware to authenticate JWT token
 app.use(authenticateToken);
-// Example of `authenticateToken` middleware (not provided in your snippet)
 
 // Protected route example
 app.get("/protected", (req, res) => {
@@ -135,7 +130,6 @@ app.post("/post", upload.single("image"), async (req, res) => {
       createdAt: new Date(),
     };
 
-    // Ensure user.posts is initialized as an array
     if (!Array.isArray(user.posts)) {
       user.posts = [];
     }
@@ -148,6 +142,22 @@ app.post("/post", upload.single("image"), async (req, res) => {
   } catch (error) {
     console.error("Error submitting post:", error);
     res.status(500).json({ error: "Error submitting post" });
+  }
+});
+app.get("/allPosts", authenticateToken, async (req, res) => {
+  try {
+    const users = await User.find({}, "name posts"); // Fetch all users with their names and posts
+    const posts = users.flatMap((user) =>
+      user.posts.map((post) => ({
+        post,
+        user: { name: user.name },
+      }))
+    );
+
+    res.status(200).json({ posts });
+  } catch (error) {
+    console.error("Error fetching all users' posts:", error);
+    res.status(500).json({ error: "Error fetching all users' posts" });
   }
 });
 
