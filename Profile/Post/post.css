@@ -97,7 +97,7 @@ greet {
 
 .media {
     max-width: 100%;
-    max-height: 200px; /* Set a consistent max height for media */
+    max-height: 400; /* Set a consistent max height for media */
     object-fit: cover; /* Maintain aspect ratio for images */
     border-radius: 10px;
 }
